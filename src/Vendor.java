@@ -3,18 +3,17 @@ import java.util.Random;
 public class Vendor implements Runnable{
     private final TicketPool ticketPool;
     private final int ticketReleaseRate;
-    private final int iterations;
     private final Random random;
 
-    public Vendor(TicketPool ticketPool, int ticketReleaseRate, int iterations) {
+    public Vendor(TicketPool ticketPool, int ticketReleaseRate) {
         this.ticketPool = ticketPool;
         this.ticketReleaseRate = ticketReleaseRate;
-        this.iterations = iterations;
         this.random = new Random();
     }
 
     @Override
     public void run() {
+        int iterations = random.nextInt(10) + 1;
         for(int i=0; i < iterations; i++) {
             int ticketsToAdd = random.nextInt(10) + 1;
             ticketPool.addTickets(ticketsToAdd);

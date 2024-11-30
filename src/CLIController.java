@@ -18,19 +18,12 @@ public class CLIController {
         System.out.println("Enter customer retrieval interval (ms):");
         int customerRetrievalRate = scanner.nextInt();
 
-        // Get the input for no. of iterations for vendor and customer
-        System.out.println("Enter number of vendors who would release tickets: ");
-        int vendorIterations = scanner.nextInt();
-
-        System.out.println("Enter number of customers who would buy tickets: ");
-        int customerIterations = scanner.nextInt();
-
         // Initialize TicketPool
         ticketPool = new TicketPool(maxCapacity);
 
         // Start Vendor and Customer threads
-        vendorThread = new Thread(new Vendor(ticketPool, ticketReleaseRate, vendorIterations));
-        customerThread = new Thread(new Customer(ticketPool, customerRetrievalRate, customerIterations));
+        vendorThread = new Thread(new Vendor(ticketPool, ticketReleaseRate));
+        customerThread = new Thread(new Customer(ticketPool, customerRetrievalRate));
 
         vendorThread.start();
         customerThread.start();

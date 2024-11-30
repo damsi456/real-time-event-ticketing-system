@@ -20,7 +20,8 @@ public class TicketPool {
         }
 
         else {
-            System.out.println("Cannot tickets. Ticket pool is at max capacity (" + maxCapacity +").");
+            System.out.println("A vendor's attempt to add a ticket failed. Ticket pool is at max capacity (" +
+                    maxCapacity +").");
         }
     }
 
@@ -33,7 +34,8 @@ public class TicketPool {
                     tickets.size());
         }
         else {
-            System.out.println("Not enough tickets to remove.");
+            System.out.println("There wasn't enough tickets to fulfil a customer's attempt. Total tickets available: " +
+                    tickets.size());
         }
     }
 
