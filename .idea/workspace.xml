@@ -6,7 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="0a82c000-d76b-41d8-816a-a4a3299c8414" name="Changes" comment="Created TicketPool &amp; added Customer and Vendor">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/CLIController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CLIController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Customer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Customer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TicketPool.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/TicketPool.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Vendor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Vendor.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,6 +53,7 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -91,7 +95,7 @@
       <workItem from="1732726431981" duration="1691000" />
       <workItem from="1732759357375" duration="2793000" />
       <workItem from="1732901227566" duration="1257000" />
-      <workItem from="1732938648610" duration="11313000" />
+      <workItem from="1732938648610" duration="27914000" />
     </task>
     <task id="LOCAL-00001" summary="Created TicketPool &amp; added Customer and Vendor">
       <option name="closed" value="true" />

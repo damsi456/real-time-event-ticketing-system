@@ -10,32 +10,30 @@ public class TicketPool {
         this.tickets = new ArrayList<>();
     }
 
-    public synchronized boolean addTickets(int count) {
+    public synchronized void addTickets(int count) {
         if(tickets.size() + count <= maxCapacity) {
             for (int i=0; i < count; i++) {
-                tickets.add(tickets.size() + 1);
+                tickets.add(1);
             }
-            System.out.println(count + " tickets added. Current ticket pool: ");
-            return true;
+            System.out.println(count + " ticket(s) added to the pool by a vendor. Total tickets available: " +
+                    tickets.size());
         }
 
         else {
-            System.out.println("Cannot add more tickets. Ticket pool is at max capacity (" + maxCapacity +").");
-            return false;
+            System.out.println("Cannot tickets. Ticket pool is at max capacity (" + maxCapacity +").");
         }
     }
 
-    public synchronized boolean removeTickets(int count) {
+    public synchronized void removeTickets(int count) {
         if(tickets.size() >= count){
             for (int i = 0; i < count; i++) {
                 tickets.removeFirst();
             }
-            System.out.println(count + " tickets removed. Current ticket pool: ");
-            return true;
+            System.out.println(count + " ticket(s) bought from the pool by a customer. Total tickets available: " +
+                    tickets.size());
         }
         else {
             System.out.println("Not enough tickets to remove.");
-            return false;
         }
     }
 
