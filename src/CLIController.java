@@ -31,6 +31,7 @@ public class CLIController {
         try {
             vendorThread.join();
             customerThread.join();
+            System.out.println("Final Ticket Pool Status: " + ticketPool.getTicketPool());
         } catch (InterruptedException e) {
             System.out.println("Main thread interrupted.");
         }

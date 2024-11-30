@@ -24,6 +24,5 @@ public class Vendor implements Runnable{
                 break;
             }
         }
-        System.out.println(iterations + " vendors have added their tickets.");
     }
 }

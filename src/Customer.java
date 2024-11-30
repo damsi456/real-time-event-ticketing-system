@@ -24,7 +24,6 @@ public class Customer implements Runnable{
                 break;
             }
         }
-        System.out.println(iterations + " customers have bought tickets.");
     }
 }
 
