@@ -20,8 +20,8 @@ public class TicketPool {
         }
 
         else {
-            System.out.println("A vendor's attempt to add tickets failed. Ticket pool is at max capacity (" +
-                    maxCapacity +").");
+            System.out.println("A vendor's attempt to add " + count + " tickets failed. Total tickets available: " +
+                    tickets.size());
         }
     }
 
