@@ -3,7 +3,7 @@ import java.util.Random;
 public class Customer implements Runnable{
     private final TicketPool ticketPool;
     private final int customerRetrievalRate;
-    private Random random;
+    private final Random random;
 
     public Customer(TicketPool ticketPool, int customerRetrievalRate) {
         this.ticketPool = ticketPool;
@@ -13,17 +13,18 @@ public class Customer implements Runnable{
 
     @Override
     public void run() {
-        int iterations = random.nextInt(10) + 1;
-        for(int i=0; i < iterations; i++) {
-            int ticketsToRemove = random.nextInt(3) + 1;
-            ticketPool.removeTickets(ticketsToRemove);
-            try{
-                Thread.sleep(customerRetrievalRate);
-            } catch (InterruptedException e){
-                System.out.println();
-                break;
+        while (!Thread.currentThread().isInterrupted()) { // Check interruption status
+            try {
+                int ticketsToBuy = random.nextInt(3) + 1;
+                ticketPool.removeTickets(ticketsToBuy);
+
+                Thread.sleep(customerRetrievalRate); // Sleep may throw InterruptedException
+            } catch (InterruptedException e) {
+                System.out.println("Customer thread interrupted.");
+                break; // Exit the loop if interrupted
             }
         }
+        System.out.println("Customer stopped.");
     }
 }
 

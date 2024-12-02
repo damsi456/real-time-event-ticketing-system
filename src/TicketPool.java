@@ -34,8 +34,8 @@ public class TicketPool {
                     tickets.size());
         }
         else {
-            System.out.println("There wasn't enough tickets to fulfil a customer's attempt. Total tickets available: " +
-                    tickets.size());
+            System.out.println("There wasn't enough tickets to fulfil a customer's attempt of " + count + " tickets. " +
+                    "Total tickets available: " + tickets.size());
         }
     }
 

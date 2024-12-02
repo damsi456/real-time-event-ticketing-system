@@ -6,7 +6,7 @@ public class CLIController {
     public void startCLI() {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Welcome to the Real-Time Event Ticket Booking System Simulation!");
+        System.out.println("Welcome to the Real-Time Event Ticketing System Simulation!");
         System.out.println("Type 'start' to begin or 'stop' to exit.");
 
         while (true) {
@@ -15,6 +15,7 @@ public class CLIController {
 
             if (command.equals("start")){
                 runSimulation();
+                break;
             } else if (command.equals("stop")){
                 System.out.println("Exiting the simulation...\nGoodbye!");
                 break;
@@ -26,6 +27,8 @@ public class CLIController {
     }
 
     public void runSimulation() {
+        System.out.println("Starting simulation....");
+
         Scanner scanner = new Scanner(System.in);
 
         // Gather configuration inputs
@@ -38,6 +41,8 @@ public class CLIController {
         System.out.println("Enter customer retrieval interval (ms):");
         int customerRetrievalRate = scanner.nextInt();
 
+        scanner.nextLine();
+
         // Initialize TicketPool
         ticketPool = new TicketPool(maxCapacity);
 
@@ -48,15 +53,24 @@ public class CLIController {
         vendorThread.start();
         customerThread.start();
 
+        while (true) {
+            System.out.print("Type 's' to end the simulation. \n \n");
+            String command = scanner.nextLine().trim().toLowerCase();
+
+            if (command.equals("s")) {
+                vendorThread.interrupt(); // Interrupt threads
+                customerThread.interrupt();
+                break;
+            }
+        }
+
         try {
             vendorThread.join();
             customerThread.join();
+            System.out.println("Exiting the simulation....");
             System.out.println("Final Ticket Pool Status: " + ticketPool.getTicketPool());
         } catch (InterruptedException e) {
             System.out.println("Main thread interrupted.");
         }
-
-        System.out.println("Simulation completed.");
-        System.out.println("Type 'start' to run simulation again or 'stop' to exit.");
     }
 }
