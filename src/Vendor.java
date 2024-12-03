@@ -13,13 +13,13 @@ public class Vendor implements Runnable{
 
     @Override
     public void run() {
-        while (!Thread.currentThread().isInterrupted()) { // Check interruption status
+        while (!Thread.currentThread().isInterrupted()) {
             try {
+                Thread.sleep(ticketReleaseRate); // Sleep may throw InterruptedException
                 int ticketsToAdd = random.nextInt(5) + 1;
                 ticketPool.addTickets(ticketsToAdd);
 
-                Thread.sleep(ticketReleaseRate); // Sleep may throw InterruptedException
-            } catch (InterruptedException e) {
+                } catch (InterruptedException e) {
                 System.out.println("Vendor thread interrupted.");
                 break; // Exit the loop if interrupted
             }

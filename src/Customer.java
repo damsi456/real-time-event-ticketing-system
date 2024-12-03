@@ -13,13 +13,13 @@ public class Customer implements Runnable{
 
     @Override
     public void run() {
-        while (!Thread.currentThread().isInterrupted()) { // Check interruption status
+        while (!Thread.currentThread().isInterrupted()) {
             try {
+                Thread.sleep(customerRetrievalRate); // Sleep may throw InterruptedException
                 int ticketsToBuy = random.nextInt(3) + 1;
                 ticketPool.removeTickets(ticketsToBuy);
 
-                Thread.sleep(customerRetrievalRate); // Sleep may throw InterruptedException
-            } catch (InterruptedException e) {
+                } catch (InterruptedException e) {
                 System.out.println("Customer thread interrupted.");
                 break; // Exit the loop if interrupted
             }

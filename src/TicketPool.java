@@ -11,31 +11,34 @@ public class TicketPool {
     }
 
     public synchronized void addTickets(int count) {
+        String threadName = Thread.currentThread().getName();
+
         if(tickets.size() + count <= maxCapacity) {
             for (int i=0; i < count; i++) {
                 tickets.add(tickets.size() + 1);
             }
-            System.out.println(count + " ticket(s) added to the pool by a vendor. Total tickets available: " +
+            System.out.println(threadName + " added " + count + " ticket(s) to the pool. Total tickets available: " +
                     tickets.size());
         }
 
         else {
-            System.out.println("A vendor's attempt to add " + count + " tickets failed. Total tickets available: " +
+            System.out.println(threadName + "'s attempt to add " + count + " tickets failed. Total tickets available: " +
                     tickets.size());
         }
     }
 
     public synchronized void removeTickets(int count) {
+        String threadName = Thread.currentThread().getName();
         if(tickets.size() >= count){
             for (int i = 0; i < count; i++) {
                 tickets.removeLast();
             }
-            System.out.println(count + " ticket(s) bought from the pool by a customer. Total tickets available: " +
+            System.out.println(threadName + " bought " + count + " ticket(s) from the pool. Total tickets available: " +
                     tickets.size());
         }
         else {
-            System.out.println("There wasn't enough tickets to fulfil a customer's attempt of " + count + " tickets. " +
-                    "Total tickets available: " + tickets.size());
+            System.out.println(threadName + "'s attempt to buy " + count + " tickets failed. Total tickets available: " +
+                    tickets.size());
         }
     }
 
