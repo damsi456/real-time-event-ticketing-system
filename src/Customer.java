@@ -15,7 +15,7 @@ public class Customer implements Runnable{
 
     @Override
     public void run() {
-        while (ticketPool.isRunning()) {
+        while (!Thread.currentThread().isInterrupted()) {
             int ticketsToBuy = random.nextInt(3) + 1;
             ticketPool.removeTickets(name, ticketsToBuy, customerRetrievalRate);
         }

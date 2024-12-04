@@ -8,7 +8,6 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/CLIController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CLIController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Customer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Customer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/TicketPool.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/TicketPool.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Vendor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Vendor.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -101,6 +100,7 @@
       <workItem from="1733023182426" duration="7752000" />
       <workItem from="1733107935701" duration="30238000" />
       <workItem from="1733228144700" duration="9494000" />
+      <workItem from="1733326466230" duration="4391000" />
     </task>
     <task id="LOCAL-00001" summary="Created TicketPool &amp; added Customer and Vendor">
       <option name="closed" value="true" />

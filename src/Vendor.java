@@ -15,7 +15,7 @@ public class Vendor implements Runnable{
 
     @Override
     public void run() {
-        while (ticketPool.isRunning()) {
+        while (!Thread.currentThread().isInterrupted()) {
             int ticketsToAdd = random.nextInt(5) + 1;
             ticketPool.addTickets(name, ticketsToAdd, ticketReleaseRate);
         }

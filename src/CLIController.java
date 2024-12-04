@@ -3,6 +3,11 @@ import java.util.List;
 import java.util.Scanner;
 
 public class CLIController {
+    private List<Thread> threads;
+
+    public CLIController() {
+        this.threads = new ArrayList<>();
+    }
 
     public void startCLI() {
         Scanner scanner = new Scanner(System.in);
@@ -48,30 +53,40 @@ public class CLIController {
         TicketPool ticketPool = new TicketPool(maxCapacity);
 
         for (int i = 1; i <= 5; i++) {
-            new Thread(new Vendor("Vendor-" + i, ticketPool, ticketReleaseRate)).start();
-            new Thread(new Customer("Customer-" + i, ticketPool, customerRetrievalRate)).start();
+            Thread vendorThread = new Thread(new Vendor("Vendor-" + i, ticketPool, ticketReleaseRate));
+            Thread customerThread = new Thread(new Customer("Customer-" + i, ticketPool, customerRetrievalRate));
+            threads.add(vendorThread);
+            threads.add(customerThread);
+            vendorThread.start();
+            customerThread.start();
         }
 
         System.out.println("Type 's' to stop the simulation.");
         while (true) {
             String input = scanner.next();
             if (input.equalsIgnoreCase("s")) {
-                ticketPool.stopSimulation();
-                System.out.println("Simulation stopped.");
+                stopSimulation();
                 break;
             }
         }
 
-//        for (Thread thread : threads) {
-//            try {
-//                thread.join();
-//            } catch (InterruptedException e) {
-//                System.out.println(thread.getName() + " interrupted.");
-//            }
-//        }
-
         System.out.println("Exiting the simulation....");
         System.out.println("Final Ticket Pool Status: " + ticketPool.getTicketPool());
+    }
 
+    private void stopSimulation() {
+        for (Thread thread : threads) {
+            thread.interrupt();
+        }
+
+        for (Thread thread : threads) {
+            try {
+                thread.join(); // Wait for 1 second for each thread to finish
+            } catch (InterruptedException e) {
+                System.out.println("Interrupted while waiting for " + thread.getName() + " to finish.");
+            }
+        }
+
+        System.out.println("Simulation stopped.");
     }
 }
