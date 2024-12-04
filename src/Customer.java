@@ -1,11 +1,13 @@
 import java.util.Random;
 
 public class Customer implements Runnable{
+    private final String name;
     private final TicketPool ticketPool;
     private final int customerRetrievalRate;
     private final Random random;
 
-    public Customer(TicketPool ticketPool, int customerRetrievalRate) {
+    public Customer(String name, TicketPool ticketPool, int customerRetrievalRate) {
+        this.name = name;
         this.ticketPool = ticketPool;
         this.customerRetrievalRate = customerRetrievalRate;
         this.random = new Random();
@@ -13,18 +15,10 @@ public class Customer implements Runnable{
 
     @Override
     public void run() {
-        while (!Thread.currentThread().isInterrupted()) {
-            try {
-                Thread.sleep(customerRetrievalRate); // Sleep may throw InterruptedException
-                int ticketsToBuy = random.nextInt(3) + 1;
-                ticketPool.removeTickets(ticketsToBuy);
-
-                } catch (InterruptedException e) {
-                System.out.println("Customer thread interrupted.");
-                break; // Exit the loop if interrupted
-            }
+        while (ticketPool.isRunning()) {
+            int ticketsToBuy = random.nextInt(3) + 1;
+            ticketPool.removeTickets(name, ticketsToBuy, customerRetrievalRate);
         }
-        System.out.println("Customer stopped.");
     }
 }
 

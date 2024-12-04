@@ -3,7 +3,6 @@ import java.util.List;
 import java.util.Scanner;
 
 public class CLIController {
-    private TicketPool ticketPool;
 
     public void startCLI() {
         Scanner scanner = new Scanner(System.in);
@@ -34,10 +33,10 @@ public class CLIController {
         Scanner scanner = new Scanner(System.in);
 
         // Gather configuration inputs
-        System.out.println("Enter max ticket capacity in the pool:");
+        System.out.println("Enter the maximum ticket capacity in the pool:");
         int maxCapacity = scanner.nextInt();
 
-        System.out.println("Enter vendor release interval (ms):");
+        System.out.println("Enter the vendor ticket release interval (ms):");
         int ticketReleaseRate = scanner.nextInt();
 
         System.out.println("Enter customer retrieval interval (ms):");
@@ -46,62 +45,30 @@ public class CLIController {
         scanner.nextLine();
 
         // Initialize TicketPool
-        ticketPool = new TicketPool(maxCapacity);
+        TicketPool ticketPool = new TicketPool(maxCapacity);
 
-        // Start Vendor and Customer threads
-        List<Thread> customerThreads = new ArrayList<>();
-        List<Thread> vendorThreads = new ArrayList<>();
-
-        for (int i = 0; i < 5; i++) {
-            vendorThreads.add(new Thread(new Vendor(ticketPool, ticketReleaseRate), "Vendor-" + (i + 1)));
+        for (int i = 1; i <= 5; i++) {
+            new Thread(new Vendor("Vendor-" + i, ticketPool, ticketReleaseRate)).start();
+            new Thread(new Customer("Customer-" + i, ticketPool, customerRetrievalRate)).start();
         }
 
-        for (Thread vendorThread : vendorThreads) {
-            vendorThread.start();
-            /*try {
-                Thread.sleep(ticketReleaseRate); // Small delay to stagger customer thread starts
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }*/
-        }
-
-        for (int i = 0; i < 10; i++) {
-            customerThreads.add(new Thread(new Customer(ticketPool, customerRetrievalRate), "Customer-" + (i + 1)));
-        }
-
-        for (Thread customerThread : customerThreads) {
-            customerThread.start();
-            /*try {
-                Thread.sleep(customerRetrievalRate); // Small delay to stagger customer thread starts
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }*/
-        }
-
-        // Combine vendor and customer threads for stopping later
-        List<Thread> threads = new ArrayList<>();
-        threads.addAll(vendorThreads);
-        threads.addAll(customerThreads);
-
+        System.out.println("Type 's' to stop the simulation.");
         while (true) {
-            System.out.print("Type 's' to end the simulation. \n \n");
-            String command = scanner.nextLine().trim().toLowerCase();
-
-            if (command.equals("s")) {
-                for (Thread thread : threads) {
-                    thread.interrupt();
-                }
+            String input = scanner.next();
+            if (input.equalsIgnoreCase("s")) {
+                ticketPool.stopSimulation();
+                System.out.println("Simulation stopped.");
                 break;
             }
         }
 
-        for (Thread thread : threads) {
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                System.out.println(thread.getName() + " interrupted.");
-            }
-        }
+//        for (Thread thread : threads) {
+//            try {
+//                thread.join();
+//            } catch (InterruptedException e) {
+//                System.out.println(thread.getName() + " interrupted.");
+//            }
+//        }
 
         System.out.println("Exiting the simulation....");
         System.out.println("Final Ticket Pool Status: " + ticketPool.getTicketPool());
