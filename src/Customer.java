@@ -6,6 +6,12 @@ public class Customer implements Runnable{
     private final int customerRetrievalRate;
     private final Random random;
 
+    /**
+     * Constructor
+     * @param name the name of the customer
+     * @param ticketPool the ticket pool object
+     * @param customerRetrievalRate how often customers remove tickets from the pool
+     */
     public Customer(String name, TicketPool ticketPool, int customerRetrievalRate) {
         this.name = name;
         this.ticketPool = ticketPool;
@@ -13,6 +19,9 @@ public class Customer implements Runnable{
         this.random = new Random();
     }
 
+    /**
+     * Simulates the behavior of the customer
+     */
     @Override
     public void run() {
         while (!Thread.currentThread().isInterrupted()) {
