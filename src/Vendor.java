@@ -24,9 +24,8 @@ public class Vendor implements Runnable{
      */
     @Override
     public void run() {
-        while (!Thread.currentThread().isInterrupted()) {
-            int ticketsToAdd = random.nextInt(5) + 1;
+            int ticketsToAdd = random.nextInt(20) + 1; // Assuming that a vendor can add maximum 20 tickets at a
+        // time
             ticketPool.addTickets(name, ticketsToAdd, ticketReleaseRate);
-        }
     }
 }

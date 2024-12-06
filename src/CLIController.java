@@ -17,16 +17,16 @@ public class CLIController {
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("\nWelcome to the Real-Time Event Ticketing System Simulation!");
-        System.out.println("Type 'start' to begin or 'stop' to exit.");
+        System.out.println("-----------------------------------------------------------");
 
         // Running until the user starts or stops
         while (true) {
+            System.out.println("Type 'start' to begin or 'stop' to exit.");
             System.out.println("\nEnter Command: ");
             String command = scanner.nextLine().trim().toLowerCase();
 
             if (command.equals("start")){
                 runSimulation();
-                break;
             } else if (command.equals("stop")){
                 System.out.println("Exiting the simulation...\nGoodbye!");
                 break;
@@ -71,47 +71,65 @@ public class CLIController {
         // Initialize TicketPool
         TicketPool ticketPool = new TicketPool(maxCapacity);
 
-        // Start threads
-        for (int i = 1; i <= numberOfThreads; i++) {
-            Thread vendorThread = new Thread(new Vendor("Vendor-" + i, ticketPool, ticketReleaseRate));
-            Thread customerThread = new Thread(new Customer("Customer-" + i, ticketPool, customerRetrievalRate));
-            threads.add(vendorThread);
-            threads.add(customerThread);
-            vendorThread.start();
-            customerThread.start();
-        }
+        // Initialize lists for vendor and customer threads
+        List<Thread> vendorThreads = new ArrayList<>();
+        List<Thread> customerThreads = new ArrayList<>();
 
-        // Call stop simulation when user types stop
-        System.out.println("Type 'stop' to stop the simulation.");
-        while (true) {
-            String input = scanner.next();
-            if (input.equalsIgnoreCase("stop")) {
-                stopSimulation();
-                break;
+        // Create threads for vendors and customers
+        Thread vendorManager = new Thread(() -> {
+            int vendorCount = 3; // Number of vendor threads
+            for (int i = 1; i <= vendorCount; i++) {
+                Thread vendorThread = new Thread(new Vendor("Vendor- " + i, ticketPool, ticketReleaseRate));
+                vendorThreads.add(vendorThread);
+                vendorThread.start();
+                try {
+                    Thread.sleep(ticketReleaseRate); // Delay between vendor threads
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+                Thread.currentThread().interrupt();
             }
+        });
+
+        Thread customerManager = new Thread(() -> {
+            int customerCount = 3; // Number of customer threads
+            for (int i = 1; i <= customerCount; i++) {
+                Thread customerThread = new Thread(new Customer("Customer- " + i, ticketPool, customerRetrievalRate));
+                customerThreads.add(customerThread);
+                customerThread.start();
+                try {
+                    Thread.sleep(customerRetrievalRate); // Delay between customer threads
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+                Thread.currentThread().interrupt();
+            }
+        });
+
+        vendorManager.start();
+        customerManager.start();
+
+        // Wait for manager threads to finish
+        try {
+            vendorManager.join();
+            customerManager.join();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            System.out.println("Simulation interrupted.");
         }
 
-        System.out.println("Exiting the simulation...\nGoodbye!");
-        System.out.println();
-        System.out.println("Final Ticket Pool Status: " + ticketPool.getTicketPool());
-    }
-
-    /**
-     * Interrupt all the threads
-     */
-    private void stopSimulation() {
-        for (Thread thread : threads) {
-            thread.interrupt();
-        }
-
-        for (Thread thread : threads) {
-            try {
+        // Wait for vendor and customer threads to finish
+        try {
+            for (Thread thread : vendorThreads) {
                 thread.join();
-            } catch (InterruptedException e) {
-                System.out.println("Interrupted while waiting for " + thread.getName() + " to finish.");
             }
+            for (Thread thread : customerThreads) {
+                thread.join();
+            }
+        } catch (InterruptedException e) {
+            System.out.println("Simulation interrupted while waiting for threads to finish.");
         }
 
-        System.out.println("Simulation stopped.");
+        System.out.println("Simulation completed.");
     }
 }

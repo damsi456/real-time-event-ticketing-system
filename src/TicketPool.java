@@ -41,13 +41,6 @@ public class TicketPool {
                 + tickets.size());
         // Notify all waiting customers that tickets have been added
         notifyAll();
-
-        // Every vendor thread waits this interval after adding tickets to the pool
-        try{
-            Thread.sleep(ticketReleaseRate);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
     }
 
     /**
@@ -75,13 +68,6 @@ public class TicketPool {
         System.out.println(customerName + " bought " + count + " ticket(s). Tickets remaining: " + tickets.size());
         // Notify all waiting vendors that there are space in the pool
         notifyAll();
-
-        // Every customer thread waits this interval after adding tickets to the pool
-        try{
-            Thread.sleep(customerRetrievalRate);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
     }
 
     public synchronized List<Integer> getTicketPool() {

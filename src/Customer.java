@@ -24,10 +24,8 @@ public class Customer implements Runnable{
      */
     @Override
     public void run() {
-        while (!Thread.currentThread().isInterrupted()) {
-            int ticketsToBuy = random.nextInt(3) + 1;
+            int ticketsToBuy = random.nextInt(5) + 1; // Assuming that a customer can buy max 5 tickets at a time
             ticketPool.removeTickets(name, ticketsToBuy, customerRetrievalRate);
-        }
     }
 }
 
