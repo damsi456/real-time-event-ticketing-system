@@ -3,11 +3,9 @@ import java.util.List;
 import java.util.Scanner;
 
 public class CLIController {
-    private final List<Thread> threads;
     private static final int numberOfThreads = 5;
 
     public CLIController() {
-        this.threads = new ArrayList<>();
     }
 
     /**
@@ -37,39 +35,25 @@ public class CLIController {
         scanner.close();
     }
 
-
     /**
      * Starts the simulation
      */
     public void runSimulation() {
-        System.out.println("Starting simulation....");
+        System.out.println("Starting simulation....\n");
 
         Scanner scanner = new Scanner(System.in);
 
         // Get configuration inputs
-        System.out.println("Enter the maximum ticket capacity in the pool:");
-        while (!scanner.hasNextInt()) {
-            System.out.println("Invalid input. Please enter an integer.");
-            scanner.next();
-        }
-        int maxCapacity = scanner.nextInt();
-
-        System.out.println("Enter the vendor ticket release interval (ms):");
-        while (!scanner.hasNextInt()) {
-            System.out.println("Invalid input. Please enter an integer.");
-            scanner.next();
-        }
-        int ticketReleaseRate = scanner.nextInt();
-
-        System.out.println("Enter customer retrieval interval (ms):");
-        while (!scanner.hasNextInt()) {
-            System.out.println("Invalid input. Please enter an integer.");
-        }
-        int customerRetrievalRate = scanner.nextInt();
+        int totalTickets = getInput(scanner, "Enter total tickets available in the system: ");
+        int maxCapacity = getInput(scanner, "Enter the maximum ticket capacity in the pool: ");
+        int ticketReleaseRate = getInput(scanner, "Enter the vendor ticket release rate (ms): ");
+        int customerRetrievalRate = getInput(scanner, "Enter customer retrieval rate (ms): ");
         scanner.nextLine();
+        int vendorCount = getInput(scanner, "Enter the number of vendors: ");
+        int customerCount = getInput(scanner, "Enter the number of customers: ");
 
         // Initialize TicketPool
-        TicketPool ticketPool = new TicketPool(maxCapacity);
+        TicketPool ticketPool = new TicketPool(maxCapacity, totalTickets);
 
         // Initialize lists for vendor and customer threads
         List<Thread> vendorThreads = new ArrayList<>();
@@ -77,9 +61,8 @@ public class CLIController {
 
         // Create threads for vendors and customers
         Thread vendorManager = new Thread(() -> {
-            int vendorCount = 3; // Number of vendor threads
             for (int i = 1; i <= vendorCount; i++) {
-                Thread vendorThread = new Thread(new Vendor("Vendor- " + i, ticketPool, ticketReleaseRate));
+                Thread vendorThread = new Thread(new Vendor("Vendor- " + i, ticketPool));
                 vendorThreads.add(vendorThread);
                 vendorThread.start();
                 try {
@@ -92,9 +75,8 @@ public class CLIController {
         });
 
         Thread customerManager = new Thread(() -> {
-            int customerCount = 3; // Number of customer threads
             for (int i = 1; i <= customerCount; i++) {
-                Thread customerThread = new Thread(new Customer("Customer- " + i, ticketPool, customerRetrievalRate));
+                Thread customerThread = new Thread(new Customer("Customer- " + i, ticketPool));
                 customerThreads.add(customerThread);
                 customerThread.start();
                 try {
@@ -121,9 +103,11 @@ public class CLIController {
         // Wait for vendor and customer threads to finish
         try {
             for (Thread thread : vendorThreads) {
+                thread.interrupt();
                 thread.join();
             }
             for (Thread thread : customerThreads) {
+                thread.interrupt();
                 thread.join();
             }
         } catch (InterruptedException e) {
@@ -131,5 +115,15 @@ public class CLIController {
         }
 
         System.out.println("Simulation completed.");
+        System.out.println("Final Ticket Pool Status: " + ticketPool.getTicketPool());
+    }
+
+    private int getInput(Scanner scanner, String prompt) {
+        System.out.println(prompt);
+        while (!scanner.hasNextInt()){
+            System.out.println("Invalid input. Please enter an integer.");
+            scanner.next();
+        }
+        return scanner.nextInt();
     }
 }

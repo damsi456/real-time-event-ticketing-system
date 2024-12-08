@@ -4,24 +4,25 @@ import java.util.List;
 public class TicketPool {
     private final int maxCapacity;
     private final List <Integer> tickets;
-    private boolean running = true;
 
     /**
      * Constructor
      * @param maxCapacity maximum capacity for ticketPool
      */
-    public TicketPool(int maxCapacity) {
+    public TicketPool(int maxCapacity, int totalTickets) {
         this.maxCapacity = maxCapacity;
         this.tickets = new ArrayList<>();
+        for (int i = 1; i <= totalTickets; i++) {
+            tickets.add(i);
+        }
     }
 
     /**
      * Adds tickets to the pool
      * @param vendorName name of the vendor
      * @param count number of tickets to add
-     * @param ticketReleaseRate frequency of tickets releasing by vendors
      */
-    public synchronized void addTickets(String vendorName, int count, int ticketReleaseRate) {
+    public synchronized void addTickets(String vendorName, int count) {
         while (tickets.size() + count > maxCapacity){
             System.out.println(vendorName + " is waiting as the pool is full.");
             // Make vendor wait if the pool is full
@@ -47,9 +48,8 @@ public class TicketPool {
      * Removes tickets from the pool
      * @param customerName name of the customer
      * @param count number of tickets to remove
-     * @param customerRetrievalRate how often customers remove tickets from the pool
      */
-    public synchronized void removeTickets(String customerName, int count, int customerRetrievalRate) {
+    public synchronized void removeTickets(String customerName, int count) {
         while (tickets.size() < count) {
             System.out.println(customerName + " is waiting as there are not enough tickets.");
             // Make customer wait if there are not enough tickets in the pool
@@ -70,7 +70,7 @@ public class TicketPool {
         notifyAll();
     }
 
-    public synchronized List<Integer> getTicketPool() {
+    public List<Integer> getTicketPool() {
         return new ArrayList<>(tickets);
     }
 }
